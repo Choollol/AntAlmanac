@@ -1,0 +1,20 @@
+name: Assign PRs to their respective authors
+
+on:
+    pull_request:
+        types:
+            - opened
+
+permissions:
+    pull-requests: write
+
+jobs:
+    assign-pr:
+        runs-on: ubuntu-slim
+
+        steps:
+            - run: gh pr edit $URL --add-assignee $USER
+              env:
+                  GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+                  URL: ${{ github.event.pull_request.html_url }}
+                  USER: ${{ github.event.pull_request.user.login }}
